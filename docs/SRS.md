@@ -216,7 +216,7 @@ Contoh record tersimpan:
 | `data/reports.json`                                             | Database file-based utama untuk laporan aktif                                                                |
 | `server.js`                                                     | HTTP server, route API, validasi server, serialisasi operasi tulis, serta CRUD foto/JSON                     |
 | `README.md`                                                     | Panduan run, fitur, keamanan, struktur, dan troubleshooting                                                  |
-| `docs/SRS.md`                                                   | Spesifikasi formal dan naskah presentasi proyek                                                              |
+| `docs/SRS.md`                                                   | Spesifikasi, alur implementasi, contoh kode, dan batasan operasional                                         |
 | `assets/images/lost/README.md`, `assets/images/found/README.md` | Aturan penempatan foto fisik berdasarkan status barang                                                       |
 
 ### Fungsi penting di `server.js`
@@ -337,19 +337,19 @@ node server.js
 - Database laporan: `data/reports.json`
 - Folder foto: `assets/images/lost/` dan `assets/images/found/`
 
-### Panduan menjelaskan berkas dan kode
+### Struktur Kode dan Contoh Implementasi
 
-> Gunakan urutan ini saat membuka editor: mulai dari halaman yang dilihat pengguna, ikuti aliran data ke server, lalu tunjukkan tempat data disimpan.
+Bagian ini menjelaskan hubungan ant berkas utama dan contoh aliran data dari halaman pengguna, melalui server, hingga penyimpanan.
 
-| Urutan | Berkas                                                           | Penjelasan saat presentasi                                                                                                                                                                                                                                                           |
-| ------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1      | `index.html`                                                     | Kerangka website publik: bagian beranda, daftar laporan, filter, form, dan modal detail. Elemen memiliki ID seperti `report-grid` dan `report-form` agar JavaScript dapat menemukannya.                                                                                              |
-| 2      | `style.css`                                                      | Mengatur tampilan dan responsivitas halaman publik. Berkas ini tidak menyimpan atau mengubah data laporan.                                                                                                                                                                           |
-| 3      | `script.js`                                                      | Menghubungkan antarmuka publik dengan data: memuat laporan, menghitung statistik, mencari/filter, memvalidasi form, mengirim laporan, dan membuka detail. Fungsi utama yang dapat ditunjukkan: `loadReports`, `updateStats`, `getFilteredReports`, `validateForm`, dan `openDetail`. |
-| 4      | `server.js`                                                      | Bagian backend berbasis modul bawaan Node.js. Berkas ini melayani halaman, menyediakan API, memvalidasi data kembali, dan mengelola file JSON serta foto. Fungsi utama: `handleApi`, `normalizeReport`, `updateDatabase`, `storePhoto`, `movePhoto`, dan `serveStatic`.              |
-| 5      | `data.json` dan `data/reports.json`                              | `data.json` adalah data contoh awal. Ketika server berjalan, laporan aktif dibaca dan disimpan di `data/reports.json`. Tunjukkan perubahan pada file ini setelah membuat laporan.                                                                                                    |
-| 6      | `admin/index.html`, `assets/js/admin.js`, `assets/css/admin.css` | HTML membentuk dashboard, JavaScript memuat dan mengelola laporan melalui API, sedangkan CSS mengatur tampilannya. Fungsi yang mudah didemonstrasikan: `loadReports`, `renderMetrics`, `submitEdit`, dan `deleteReport`.                                                             |
-| 7      | `assets/images/lost/` dan `assets/images/found/`                 | Folder penyimpanan foto fisik. Server memilih folder berdasarkan status laporan, bukan berdasarkan alamat folder yang dikirim pengguna.                                                                                                                                              |
+| Urutan | Berkas                                                           | Tanggung jawab dan fungsi                                                                                                                                                                                                                                    |
+| ------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1      | `index.html`                                                     | Kerangka website publik: bagian beranda, daftar laporan, filter, form, dan modal detail. Elemen memiliki ID seperti `report-grid` dan `report-form` agar JavaScript dapat menemukannya.                                                                      |
+| 2      | `style.css`                                                      | Mengatur tampilan dan responsivitas halaman publik. Berkas ini tidak menyimpan atau mengubah data laporan.                                                                                                                                                   |
+| 3      | `script.js`                                                      | Menghubungkan antarmuka publik dengan data: memuat laporan, menghitung statistik, mencari/filter, memvalidasi form, mengirim laporan, dan membuka detail. Fungsi inti: `loadReports`, `updateStats`, `getFilteredReports`, `validateForm`, dan `openDetail`. |
+| 4      | `server.js`                                                      | Backend berbasis modul bawaan Node.js yang melayani halaman, menyediakan API, memvalidasi data kembali, dan mengelola file JSON serta foto. Fungsi inti: `handleApi`, `normalizeReport`, `updateDatabase`, `storePhoto`, `movePhoto`, dan `serveStatic`.     |
+| 5      | `data.json` dan `data/reports.json`                              | `data.json` adalah data contoh awal. Saat server berjalan, laporan aktif dibaca dan disimpan di `data/reports.json`. Laporan yang baru dibuat dapat diperiksa pada file tersebut.                                                                            |
+| 6      | `admin/index.html`, `assets/js/admin.js`, `assets/css/admin.css` | HTML membentuk dashboard, JavaScript memuat dan mengelola laporan melalui API, sedangkan CSS mengatur tampilannya. Fungsi inti: `loadReports`, `renderMetrics`, `submitEdit`, dan `deleteReport`.                                                            |
+| 7      | `assets/images/lost/` dan `assets/images/found/`                 | Folder penyimpanan foto fisik. Server memilih folder berdasarkan status laporan, bukan berdasarkan alamat folder yang dikirim pengguna.                                                                                                                      |
 
 #### Contoh 1: halaman mengambil laporan
 
@@ -363,7 +363,7 @@ renderReports();
 updateStats();
 ```
 
-Jelaskan bahwa `GET` berarti browser meminta data. Statistik bukan angka yang diketik tetap, melainkan dihitung dari array laporan yang diterima.
+Metode `GET` digunakan browser untuk meminta data. Statistik dihitung dari array laporan yang diterima, bukan dari angka tetap di halaman.
 
 #### Contoh 2: form mengirim laporan baru
 
@@ -400,24 +400,22 @@ Saat admin menyimpan perubahan, `submitEdit` mengirim `PUT /api/reports/:id`. Se
 
 `updateDatabase` mengantre operasi tulis supaya dua perubahan yang datang berdekatan tidak saling menimpa. Data ditulis ke file sementara terlebih dahulu, lalu dipindahkan menjadi `data/reports.json`.
 
-#### Hal penting tentang batas keamanan
+#### Batas Keamanan
 
-Login admin pada versi ini hanya diperiksa oleh JavaScript di browser. API edit dan hapus belum memverifikasi sesi admin, sehingga login tersebut bukan perlindungan untuk data. Server juga hanya mendengarkan `127.0.0.1` secara default. Jelaskan bahwa ini adalah demo lokal, bukan aplikasi yang siap dibuka ke internet.
+Login admin pada versi ini hanya diperiksa oleh JavaScript di browser. API edit dan hapus belum memverifikasi sesi admin, sehingga login tersebut bukan perlindungan untuk data. Server juga hanya mendengarkan `127.0.0.1` secara default. Aplikasi ini merupakan demo lokal dan belum siap dibuka ke internet.
 
-### Naskah presentasi siap dibacakan
+### Alur Kerja Aplikasi
 
-> Selamat pagi/siang. Saya akan mempresentasikan Lost & Found Campus, aplikasi web untuk membantu civitas kampus melaporkan barang hilang atau ditemukan dan mencari informasi barang tersebut. Aplikasi ini terdiri dari website publik dan dashboard admin.
->
-> Saya mulai dari `index.html`, yang membentuk struktur halaman publik, seperti beranda, daftar laporan, filter, form, dan jendela detail. Tampilan serta tata letaknya diatur oleh `style.css`, sedangkan interaksi halaman ditangani oleh `script.js`.
->
-> Ketika halaman dibuka, fungsi `loadReports` di `script.js` meminta data melalui endpoint `GET /api/reports`. Data yang diterima digunakan untuk membuat kartu laporan dan menghitung jumlah seluruh laporan, barang hilang, serta barang ditemukan. Pengunjung juga bisa mencari nama barang, menggabungkan filter kategori dan status, lalu membuka kartu untuk melihat detail dan kontak pelapor.
->
-> Untuk membuat laporan, pengguna mengisi nama barang, kategori, status, lokasi, tanggal, deskripsi, dan kontak. Fungsi `validateForm` memeriksa isian di browser. Foto bersifat opsional; jika dipilih, browser memvalidasi dan mengecilkan gambar sebelum mengirimnya. Setelah itu `script.js` mengirim laporan dengan metode `POST` ke API.
->
-> Server berada di `server.js`. Fungsi `handleApi` mengarahkan permintaan API, sedangkan `normalizeReport` memvalidasi data sekali lagi di sisi server. Jika laporan valid, server menyimpan data ke `data/reports.json`. Foto disimpan sebagai JPEG di `assets/images/lost/` atau `assets/images/found/`, mengikuti status laporan. Dengan demikian, data tetap ada setelah halaman ditutup atau server dimulai ulang.
->
-> Dashboard admin menggunakan `admin/index.html` untuk struktur halaman, `assets/css/admin.css` untuk tampilannya, dan `assets/js/admin.js` untuk memuat serta mengelola laporan. Admin dapat mengedit, mencetak, atau menghapus laporan. Saat status diedit, server memindahkan foto ke folder status yang baru dan memperbarui alamat fotonya. Saat laporan dihapus, record dan foto terkait ikut dihapus.
->
-> Sebagai contoh, laporan dompet berstatus “Hilang” dengan foto akan memiliki alamat foto di folder `lost`. Jika statusnya diubah menjadi “Ditemukan”, foto berpindah ke folder `found`. Contoh ini menunjukkan bahwa perubahan data dan file foto dikelola bersama oleh server.
->
-> Terakhir, perlu diketahui bahwa proyek ini masih berupa demo lokal. Login admin masih diperiksa di browser, API belum memiliki otorisasi admin, dan server hanya mendengarkan komputer lokal. Karena itu, versi ini belum aman untuk hosting publik atau untuk menyimpan informasi sensitif. Terima kasih.
+Lost & Found Campus terdiri dari website publik dan dashboard admin. `index.html` menyusun beranda, daftar laporan, filter, form, dan modal detail. `style.css` mengatur tampilan responsif, sementara `script.js` menangani interaksi pada halaman publik.
+
+Saat website dibuka, fungsi `loadReports` di `script.js` meminta data melalui endpoint `GET /api/reports`. Data dari server digunakan untuk membuat kartu dan menghitung total laporan, jumlah barang hilang, serta jumlah barang ditemukan. Pengunjung dapat mencari nama barang, menggabungkan filter kategori dan status, lalu membuka detail untuk melihat lokasi, deskripsi, tanggal, foto, dan kontak pelapor.
+
+Form laporan memeriksa nama barang, kategori, status, lokasi, tanggal, deskripsi, dan kontak melalui `validateForm`. Foto bersifat opsional. Jika dipilih, browser memvalidasi dan mengecilkan gambar sebelum `script.js` mengirim laporan dengan metode `POST` ke API.
+
+Di `server.js`, fungsi `handleApi` mengarahkan permintaan API dan `normalizeReport` memvalidasi data kembali di server. Laporan valid disimpan ke `data/reports.json`. Foto disimpan sebagai JPEG di `assets/images/lost/` atau `assets/images/found/`, sesuai status laporan. Penyimpanan file ini membuat laporan tetap tersedia setelah halaman ditutup atau server dimulai ulang.
+
+Dashboard menggunakan `admin/index.html` untuk struktur halaman, `assets/css/admin.css` untuk tampilan, dan `assets/js/admin.js` untuk membaca serta mengelola laporan. Perubahan dikirim ke API: `submitEdit` menggunakan `PUT`, sedangkan `deleteReport` menggunakan `DELETE`. Ketika status berubah, server memindahkan foto ke folder status baru dan memperbarui alamatnya. Ketika laporan dihapus, server menghapus record dan foto yang dikelola untuk laporan tersebut.
+
+Sebagai contoh, foto laporan berstatus `Hilang` disimpan di folder `lost`. Setelah status diubah menjadi `Ditemukan`, foto berpindah ke folder `found` dan nilai `photo` pada record ikut diperbarui. Data laporan dan berkas fotonya dengan demikian tetap konsisten.
+
+Proyek ini ditujukan sebagai demo lokal. Login admin masih diperiksa di browser, API belum memverifikasi otorisasi admin, dan server secara default hanya mendengarkan `127.0.0.1`. Aplikasi belum aman untuk hosting publik atau penyimpanan informasi sensitif.
