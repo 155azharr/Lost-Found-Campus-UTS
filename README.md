@@ -25,6 +25,11 @@ Lost &amp; Found Campus adalah aplikasi web untuk membantu civitas kampus mengum
 | **Dashboard admin** | Meninjau laporan, mengubah data dan foto, mengelola status, serta mencetak laporan.       |
 | **Penyimpanan**     | Menyimpan laporan dalam JSON dan foto sebagai berkas di komputer yang menjalankan server. |
 
+> **Akses produksi:**
+>
+> - Website publik: <https://lostfoundcampus.intidatamedia.id>
+> - Dashboard admin: <https://lostfoundcampus.intidatamedia.id/admin/>
+
 > **Status proyek:** demo lokal berbasis file. Autentikasi admin belum ditujukan untuk penggunaan produksi.
 
 ## Fitur Utama
