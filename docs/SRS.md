@@ -51,34 +51,112 @@ Sistem memiliki dua area. Website publik digunakan pelapor dan pencari barang. D
 
 ## 4. Arsitektur Sistem
 
+Arsitektur aplikasi terdiri dari tiga bagian: **antarmuka** yang digunakan pengunjung dan admin, **server Node.js** yang memproses permintaan, dan **penyimpanan file** untuk data serta foto. Website publik dan dashboard admin menggunakan server dan data laporan yang sama.
+
 ```mermaid
 flowchart LR
-    P[Browser publik] -->|GET /api/reports| S[server.js - Node.js]
-    P -->|POST /api/reports| S
-    A[Browser dashboard admin] -->|GET /api/reports| S
-    A -->|PUT /api/reports/:id| S
-    A -->|DELETE /api/reports/:id| S
-    S --> J[data/reports.json]
-    S --> L[assets/images/lost/*.jpg]
-    S --> F[assets/images/found/*.jpg]
-    S -->|HTML CSS JS dan foto| P
-    S -->|HTML CSS JS dan foto| A
-    A -.->|akun demo dan sesi| B[localStorage / sessionStorage browser]
+  V[Pengunjung] --> PUB[Website publik<br/>index.html, style.css, script.js]
+  U[Admin] --> ADM[Dashboard admin<br/>admin/index.html, admin.js, admin.css]
+  PUB -->|Minta dan kirim laporan| API[Server Node.js<br/>server.js]
+  ADM -->|Baca dan kelola laporan| API
+  API --> DB[data/reports.json<br/>Data laporan]
+  API --> LOST[assets/images/lost/<br/>Foto barang hilang]
+  API --> FOUND[assets/images/found/<br/>Foto barang ditemukan]
+  ADM -.->|Akun dan sesi demo| BROWSER[localStorage / sessionStorage]
 ```
 
-### Komponen
+### Bagian Sistem
 
-| Komponen                                                         | Peran                                                                                             |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `index.html`, `style.css`, `script.js`                           | Antarmuka publik, validasi form, pencarian/filter, render kartu, foto, modal, dan pemanggilan API |
-| `admin/index.html`, `assets/css/admin.css`, `assets/js/admin.js` | Login demo dan dashboard pengelolaan laporan                                                      |
-| `server.js`                                                      | Server HTTP, API laporan, validasi server-side, pengamanan path, dan operasi file                 |
-| `data.json`                                                      | Seed enam laporan contoh untuk inisialisasi awal dan mode pratinjau statis                        |
-| `data/reports.json`                                              | Daftar laporan aktif yang menjadi sumber data utama saat server Node berjalan                     |
-| `assets/images/lost/`                                            | Foto fisik untuk laporan berstatus `Hilang`                                                       |
-| `assets/images/found/`                                           | Foto fisik untuk laporan berstatus `Ditemukan`                                                    |
+| Bagian              | Berkas                                                           | Fungsi                                                                                                                                                                       |
+| ------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Antarmuka publik    | `index.html`, `style.css`, `script.js`                           | Menampilkan halaman, daftar laporan, filter, detail, dan form pelaporan. JavaScript mengambil dan mengirim data melalui API.                                                 |
+| Dashboard admin     | `admin/index.html`, `assets/css/admin.css`, `assets/js/admin.js` | Menampilkan dashboard dan mengirim permintaan untuk melihat, mengubah, atau menghapus laporan. Akun demo dan sesi login disimpan di browser, bukan diverifikasi oleh server. |
+| Server/API          | `server.js`                                                      | Menyajikan halaman, menerima permintaan API, memvalidasi data, dan mengelola file laporan serta foto.                                                                        |
+| Penyimpanan laporan | `data/reports.json`                                              | Menyimpan laporan aktif yang digunakan bersama oleh website publik dan dashboard admin.                                                                                      |
+| Penyimpanan foto    | `assets/images/lost/`, `assets/images/found/`                    | Menyimpan foto JPEG sesuai status laporan.                                                                                                                                   |
+| Data contoh         | `data.json`                                                      | Menyediakan enam laporan contoh untuk inisialisasi database dan pratinjau statis.                                                                                            |
+
+### Alur Data
+
+1. Website publik atau dashboard admin meminta daftar laporan ke server. Server mengirim data dari `data/reports.json`.
+2. Saat pengguna mengirim laporan, browser memeriksa isian lalu mengirimkannya ke API. Server memvalidasi ulang sebelum menyimpan data dan foto.
+3. Saat admin mengubah atau menghapus laporan, dashboard mengirim permintaan ke API. Server memperbarui file JSON dan foto terkait.
+4. Website publik dan dashboard memuat data terbaru dari API, sehingga keduanya menampilkan daftar laporan yang sama.
+
+**Contoh:** laporan dompet berstatus `Hilang` disimpan di `data/reports.json`, sedangkan fotonya berada di `assets/images/lost/`. Jika admin mengubah status menjadi `Ditemukan`, server memperbarui status pada data dan memindahkan foto ke `assets/images/found/`. Kedua halaman kemudian membaca perubahan tersebut dari API yang sama.
+
+Server hanya mendengarkan `127.0.0.1` secara default. Login dashboard pada versi demo dikelola di browser dan bukan autentikasi server-side; batasan ini perlu diperhatikan sebelum aplikasi dibuka ke jaringan publik.
 
 ## 5. Alur Kerja Pengguna
+
+Diagram aktivitas berikut memperlihatkan keputusan utama dalam penggunaan aplikasi. Kotak menunjukkan aktivitas, belah ketupat menunjukkan pilihan atau hasil validasi, dan panah menunjukkan urutan proses.
+
+### Aktivitas Pengunjung dan Pelapor
+
+```mermaid
+flowchart TD
+  START((Mulai)) --> OPEN[Pengunjung membuka website]
+  OPEN --> LOAD[Sistem meminta laporan melalui GET]
+  LOAD --> SHOW[Sistem menampilkan daftar dan statistik]
+  SHOW --> CHOICE{Pilih aktivitas}
+
+  CHOICE -->|Mencari barang| SEARCH[Masukkan kata kunci atau filter]
+  SEARCH --> DETAIL[Pilih laporan dan lihat detail]
+  DETAIL --> CONTACT[Hubungi pelapor bila barang sesuai]
+  CONTACT --> END((Selesai))
+
+  CHOICE -->|Membuat laporan| FORM[Isi data barang dan kontak]
+  FORM --> VALID{Validasi form berhasil?}
+  VALID -->|Tidak| FORM_ERROR[Tampilkan pesan kesalahan]
+  FORM_ERROR --> FORM
+  VALID -->|Ya| PHOTO{Menambahkan foto?}
+  PHOTO -->|Ya| COMPRESS[Browser memeriksa dan mengecilkan foto]
+  PHOTO -->|Tidak| POST[Kirim laporan melalui POST]
+  COMPRESS --> POST
+  POST --> SERVER_CHECK{Validasi server berhasil?}
+  SERVER_CHECK -->|Tidak| SERVER_ERROR[Tampilkan pesan dari server]
+  SERVER_ERROR --> FORM
+  SERVER_CHECK -->|Ya| SAVE[Simpan laporan ke data/reports.json]
+  SAVE --> HAS_PHOTO{Foto disertakan?}
+  HAS_PHOTO -->|Ya| SAVE_PHOTO[Simpan JPEG ke folder sesuai status]
+  HAS_PHOTO -->|Tidak| SUCCESS[Kirim konfirmasi berhasil]
+  SAVE_PHOTO --> SUCCESS
+  SUCCESS --> END
+```
+
+### Aktivitas Admin
+
+```mermaid
+flowchart TD
+  ADMIN_START((Mulai)) --> LOGIN[Admin membuka dashboard dan login demo]
+  LOGIN --> LOGIN_OK{Login berhasil?}
+  LOGIN_OK -->|Tidak| LOGIN_ERROR[Tampilkan pesan login]
+  LOGIN_ERROR --> LOGIN
+  LOGIN_OK -->|Ya| GET_REPORTS[Dashboard meminta laporan melalui GET]
+  GET_REPORTS --> DASHBOARD[Tampilkan ringkasan dan daftar laporan]
+  DASHBOARD --> ACTION{Pilih tindakan}
+
+  ACTION -->|Edit| EDIT[Ubah data atau status laporan]
+  EDIT --> PUT[Kirim perubahan melalui PUT]
+  PUT --> PUT_OK{Validasi server berhasil?}
+  PUT_OK -->|Tidak| EDIT_ERROR[Tampilkan pesan kesalahan]
+  EDIT_ERROR --> EDIT
+  PUT_OK -->|Ya| UPDATE[Simpan data dan sesuaikan foto]
+  UPDATE --> REFRESH[Muat ulang data terbaru]
+  REFRESH --> DASHBOARD
+
+  ACTION -->|Hapus| CONFIRM{Konfirmasi penghapusan?}
+  CONFIRM -->|Tidak| DASHBOARD
+  CONFIRM -->|Ya| DELETE[Kirim permintaan DELETE]
+  DELETE --> REMOVE[Hapus record dan foto terkait]
+  REMOVE --> REFRESH
+
+  ACTION -->|Cetak| PRINT[Siapkan tampilan cetak]
+  PRINT --> BROWSER_PRINT[Buka dialog cetak browser]
+  BROWSER_PRINT --> DASHBOARD
+```
+
+Login admin pada diagram merupakan login demo sisi browser, bukan autentikasi yang diverifikasi oleh server. Perubahan data dan foto tetap diproses oleh API Node.js.
 
 ### 5.1 Mencari barang
 
