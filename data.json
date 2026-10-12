@@ -1,0 +1,62 @@
+[
+  {
+    "id": "sample-1",
+    "name": "Dompet kulit cokelat",
+    "category": "Aksesori",
+    "status": "Hilang",
+    "location": "Perpustakaan lantai 2",
+    "date": "2026-10-10",
+    "description": "Dompet kulit warna cokelat dengan beberapa kartu di dalamnya. Terakhir terlihat saat belajar di area meja dekat jendela.",
+    "contact": "contoh.mahasiswa@kampus.ac.id"
+  },
+  {
+    "id": "sample-2",
+    "name": "Tumbler warna sage",
+    "category": "Lainnya",
+    "status": "Ditemukan",
+    "location": "Ruang kelas K.04.02",
+    "date": "2026-10-11",
+    "description": "Tumbler hijau sage dengan stiker kecil di bagian bawah. Ditemukan setelah kelas selesai.",
+    "contact": "081234567890"
+  },
+  {
+    "id": "sample-3",
+    "name": "Earphone putih",
+    "category": "Elektronik",
+    "status": "Hilang",
+    "location": "Kantin Fakultas",
+    "date": "2026-10-09",
+    "description": "Earphone putih di dalam case kecil. Kemungkinan tertinggal di meja dekat jendela kantin.",
+    "contact": "earphone.contoh@kampus.ac.id"
+  },
+  {
+    "id": "sample-4",
+    "name": "Kartu mahasiswa",
+    "category": "Dokumen",
+    "status": "Ditemukan",
+    "location": "Selasar gedung perkuliahan",
+    "date": "2026-10-12",
+    "description": "Kartu mahasiswa ditemukan di selasar. Untuk keamanan, pemilik diminta menyebutkan ciri kartu saat menghubungi pelapor.",
+    "contact": "081298765432"
+  },
+  {
+    "id": "sample-5",
+    "name": "Totebag krem",
+    "category": "Tas",
+    "status": "Hilang",
+    "location": "Area parkir motor",
+    "date": "2026-10-08",
+    "description": "Totebag kain warna krem dengan gambar bunga kecil. Di dalamnya ada buku catatan.",
+    "contact": "totebag.contoh@kampus.ac.id"
+  },
+  {
+    "id": "sample-6",
+    "name": "Kunci dengan gantungan biru",
+    "category": "Kunci",
+    "status": "Ditemukan",
+    "location": "Lapangan kampus",
+    "date": "2026-10-07",
+    "description": "Satu kunci dengan gantungan berbentuk bulat warna biru, ditemukan di dekat bangku lapangan.",
+    "contact": "081355556666"
+  }
+]

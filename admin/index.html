@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Panel admin Lost & Found Campus untuk mengelola laporan barang kampus."
+    />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <title>Admin | Lost & Found Campus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <script src="../assets/js/admin.js?v=3" defer></script>
+  </head>
+  <body class="admin-body">
+    <main class="login-stage" id="login-stage">
+      <a class="login-brand" href="../index.html"
+        ><span class="brand-symbol">LF</span
+        ><span>Lost & Found <b>Campus</b></span></a
+      >
+      <section class="login-layout">
+        <div class="login-copy">
+          <span class="overline"><span></span> PANEL PENGELOLA</span>
+          <h1>Jaga setiap<br />laporan tetap<br /><em>terarah.</em></h1>
+          <p>
+            Kelola informasi barang hilang dan ditemukan, perbarui foto, lalu
+            cetak detail yang dibutuhkan.
+          </p>
+                Foto JPEG hasil kompresi tersimpan pada folder sesuai status
+                laporan.
+            <div>
+              <b>Ruang kerja admin</b
+              ><small>Ringkasan dan tindak lanjut laporan kampus</small>
+            </div>
+          </div>
+        </div>
+        <form class="login-form" id="login-form" novalidate>
+          <div class="login-icon" aria-hidden="true">↗</div>
+          <span class="overline">SELAMAT DATANG KEMBALI</span>
+          <h2>Masuk ke dashboard</h2>
+          <p>Gunakan akun demo untuk membuka panel pengelolaan.</p>
+          <label for="admin-username">Nama pengguna</label>
+          <input
+            id="admin-username"
+            name="username"
+            autocomplete="username"
+            required
+            placeholder="Masukkan nama pengguna"
+          />
+          <label for="admin-password">Kata sandi</label>
+          <input
+            id="admin-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            placeholder="Masukkan kata sandi"
+          />
+          <p class="login-error" id="login-error" role="alert"></p>
+          <button
+            class="admin-button admin-button-primary login-submit"
+            type="submit"
+          >
+            Masuk <span aria-hidden="true">→</span>
+          </button>
+          <a class="back-link" href="../index.html"
+            >← Kembali ke website publik</a
+          >
+          <p class="demo-warning">
+            Mode demo: autentikasi berjalan di browser dan bukan perlindungan
+            untuk data produksi.
+          </p>
+        </form>
+      </section>
+      <footer class="login-footer">
+        <span>LOST & FOUND CAMPUS</span
+        ><span>Ruang kecil untuk saling menjaga.</span>
+      </footer>
+    </main>
+
+    <div class="admin-app hidden" id="admin-app">
+      <aside class="sidebar" id="sidebar">
+        <a class="sidebar-brand" href="../index.html"
+          ><span class="brand-symbol">LF</span
+          ><span>Lost & Found<small>Campus admin</small></span></a
+        >
+        <span class="sidebar-label">MENU UTAMA</span>
+        <nav class="side-nav" aria-label="Menu dashboard">
+          <button class="side-link active" type="button" data-view="overview">
+            <span>◫</span> Ringkasan
+          </button>
+          <button
+            class="side-link"
+            type="button"
+            data-view="reports"
+            data-filter="Semua"
+          >
+            <span>▤</span> Semua laporan
+          </button>
+          <button
+            class="side-link"
+            type="button"
+            data-view="reports"
+            data-filter="Hilang"
+          >
+            <span class="nav-mark nav-lost"></span> Barang hilang
+          </button>
+          <button
+            class="side-link"
+            type="button"
+            data-view="reports"
+            data-filter="Ditemukan"
+          >
+            <span class="nav-mark nav-found"></span> Barang ditemukan
+          </button>
+          <button class="side-link" type="button" data-view="photos">
+            <span>▧</span> Galeri foto
+          </button>
+          <button class="side-link" type="button" data-view="admins">
+            <span>♙</span> Kelola admin
+          </button>
+        </nav>
+        <div class="sidebar-spacer"></div>
+        <div class="sidebar-note">
+          <span class="note-spark">✳</span>
+          <div>
+            <b id="admin-storage-title">Menghubungkan server...</b
+            ><small id="admin-storage-description"
+              >Laporan dan foto akan disimpan di folder proyek.</small
+            >
+          </div>
+        </div>
+        <button class="side-link side-logout" id="logout-button" type="button">
+          <span>↪</span> Keluar
+        </button>
+      </aside>
+
+      <div class="workspace">
+        <header class="admin-topbar">
+          <button
+            class="sidebar-toggle"
+            id="sidebar-toggle"
+            type="button"
+            aria-label="Buka menu"
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+          <div class="breadcrumb">
+            <a href="../index.html">Website</a><span>/</span><b>Admin</b>
+          </div>
+          <div class="topbar-actions">
+            <span class="admin-avatar" id="current-admin-avatar">A</span
+            ><span class="admin-identity"
+              ><b id="current-admin-name">Administrator</b
+              ><small id="current-admin-role">Admin</small></span
+            >
+          </div>
+        </header>
+
+        <main class="admin-main">
+          <section class="admin-view" id="overview-view">
+            <div class="page-heading">
+              <div>
+                <span class="overline">PUSAT KONTROL</span>
+                <h1>Ringkasan <span>laporan</span></h1>
+                <p>
+                  Pantau laporan terbaru dan lanjutkan tindakan yang diperlukan.
+                </p>
+              </div>
+              <button
+                class="admin-button admin-button-primary"
+                id="overview-print"
+                type="button"
+              >
+                <span aria-hidden="true">⎙</span> Cetak daftar
+              </button>
+            </div>
+            <div class="metric-grid">
+              <article class="metric-card metric-total">
+                <div class="metric-top">
+                  <span>Total laporan</span><span class="metric-symbol">▤</span>
+                </div>
+                <strong id="metric-total">0</strong
+                ><small>Seluruh laporan aktif</small>
+              </article>
+              <article class="metric-card metric-missing">
+                <div class="metric-top">
+                  <span>Barang hilang</span><span class="metric-symbol">!</span>
+                </div>
+                <strong id="metric-lost">0</strong
+                ><small>Menunggu tindak lanjut</small>
+              </article>
+              <article class="metric-card metric-found">
+                <div class="metric-top">
+                  <span>Barang ditemukan</span
+                  ><span class="metric-symbol">✓</span>
+                </div>
+                <strong id="metric-found">0</strong
+                ><small>Menunggu pemilik</small>
+              </article>
+              <article class="metric-card metric-photos">
+                <div class="metric-top">
+                  <span>Dengan foto</span><span class="metric-symbol">▧</span>
+                </div>
+                <strong id="metric-photos">0</strong
+                ><small>Foto tersimpan di server</small>
+              </article>
+            </div>
+            <div class="overview-grid">
+              <section class="panel latest-panel">
+                <div class="panel-heading">
+                  <div>
+                    <span class="overline">PERLU DILIHAT</span>
+                    <h2>Laporan terbaru</h2>
+                  </div>
+                  <button class="inline-link" type="button" data-open-reports>
+                    Lihat semua →
+                  </button>
+                </div>
+                <div class="latest-list" id="latest-list"></div>
+              </section>
+              <section class="panel category-panel">
+                <div class="panel-heading">
+                  <div>
+                    <span class="overline">SEBARAN DATA</span>
+                    <h2>Kategori barang</h2>
+                  </div>
+                  <span class="panel-count" id="category-total">0</span>
+                </div>
+                <div class="category-list" id="category-list"></div>
+              </section>
+            </div>
+            <p class="local-data-note">
+              <span>i</span
+              ><span
+                >Laporan dan foto tersimpan di folder proyek. Akun admin demo
+                masih dikelola lokal di browser ini.</span
+              >
+            </p>
+          </section>
+
+          <section class="admin-view hidden" id="reports-view">
+            <div class="page-heading">
+              <div>
+                <span class="overline">PENGELOLAAN DATA</span>
+                <h1 id="reports-title">Semua <span>laporan</span></h1>
+                <p>Perbarui detail, foto, atau cetak informasi laporan.</p>
+              </div>
+              <button
+                class="admin-button admin-button-quiet"
+                id="print-list"
+                type="button"
+              >
+                <span aria-hidden="true">⎙</span> Cetak daftar
+              </button>
+            </div>
+            <section class="panel report-manager">
+              <div class="manager-toolbar">
+                <label class="admin-search"
+                  ><span aria-hidden="true">⌕</span
+                  ><input
+                    id="manager-search"
+                    type="search"
+                    placeholder="Cari nama atau lokasi..."
+                    aria-label="Cari laporan" /></label
+                ><label class="manager-select"
+                  ><span class="sr-only">Filter status</span
+                  ><select id="manager-status">
+                    <option value="Semua">Semua status</option>
+                    <option value="Hilang">Hilang</option>
+                    <option value="Ditemukan">Ditemukan</option>
+                  </select></label
+                ><span class="manager-count" id="manager-count">0 laporan</span>
+              </div>
+              <div class="table-scroll">
+                <table class="report-table">
+                  <thead>
+                    <tr>
+                      <th>BARANG</th>
+                      <th>KATEGORI</th>
+                      <th>STATUS</th>
+                      <th>LOKASI</th>
+                      <th>TANGGAL KEJADIAN</th>
+                      <th>TERAKHIR DIPERBARUI</th>
+                      <th>SUMBER</th>
+                      <th class="actions-heading">AKSI</th>
+                    </tr>
+                  </thead>
+                  <tbody id="report-table-body"></tbody>
+                </table>
+              </div>
+              <div class="table-empty hidden" id="table-empty">
+                <span>⌕</span><b>Tidak ada laporan di sini</b
+                ><small>Coba kata kunci atau filter yang berbeda.</small>
+              </div>
+            </section>
+          </section>
+
+          <section class="admin-view hidden" id="photos-view">
+            <div class="page-heading">
+              <div>
+                <span class="overline">ARSIP VISUAL</span>
+                <h1>Galeri <span>foto</span></h1>
+                <p>Foto laporan dikelompokkan menurut status barang.</p>
+              </div>
+              <button
+                class="admin-button admin-button-quiet"
+                id="photo-print"
+                type="button"
+              >
+                <span aria-hidden="true">⎙</span> Cetak galeri
+              </button>
+            </div>
+            <div class="gallery-summary">
+              <div>
+                <span>HILANG</span
+                ><strong id="gallery-lost-count">0 foto</strong>
+              </div>
+              <div>
+                <span>DITEMUKAN</span
+                ><strong id="gallery-found-count">0 foto</strong>
+              </div>
+              <p>
+                Foto JPEG hasil kompresi tersimpan pada folder sesuai status
+                laporan.
+              </p>
+            </div>
+            <div class="photo-gallery" id="photo-gallery"></div>
+            <div class="gallery-empty hidden" id="gallery-empty">
+              <span>▧</span>
+              <h2>Belum ada foto laporan</h2>
+              <p>Tambahkan foto lewat aksi Edit pada salah satu laporan.</p>
+              <button
+                class="admin-button admin-button-primary"
+                type="button"
+                data-open-reports
+              >
+                Kelola laporan
+              </button>
+            </div>
+          </section>
+
+          <section class="admin-view hidden" id="admins-view">
+            <div class="page-heading">
+              <div>
+                <span class="overline">AKSES PENGELOLA</span>
+                <h1>Daftar <span>admin</span></h1>
+                <p>Tambahkan dan kelola akun pengelola untuk browser ini.</p>
+              </div>
+            </div>
+            <section class="panel admin-users-panel">
+              <div class="admin-users-intro">
+                <div>
+                  <span class="overline">AKUN TERDAFTAR</span>
+                  <h2>Administrator</h2>
+                </div>
+                <span class="panel-count" id="admin-user-count">0 admin</span>
+              </div>
+              <form class="admin-create-form" id="admin-create-form" novalidate>
+                <label
+                  >Username<input
+                    id="new-admin-username"
+                    autocomplete="off"
+                    minlength="3"
+                    maxlength="24"
+                    required
+                    placeholder="Contoh: admin.kampus"
+                /></label>
+                <label
+                  >Kata sandi<input
+                    id="new-admin-password"
+                    type="password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    required
+                    placeholder="Minimal 8 karakter"
+                /></label>
+                <label
+                  >Ulangi kata sandi<input
+                    id="new-admin-confirm"
+                    type="password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    required
+                    placeholder="Ketik ulang kata sandi"
+                /></label>
+                <button class="admin-button admin-button-primary" type="submit">
+                  Tambah admin
+                </button>
+              </form>
+              <p
+                class="admin-create-error"
+                id="admin-create-error"
+                role="alert"
+              ></p>
+              <div class="table-scroll">
+                <table class="report-table admin-user-table">
+                  <thead>
+                    <tr>
+                      <th>USERNAME</th>
+                      <th>STATUS AKUN</th>
+                      <th>TERDAFTAR</th>
+                      <th class="actions-heading">AKSI</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-list-body"></tbody>
+                </table>
+              </div>
+            </section>
+            <p class="local-data-note">
+              <span>i</span
+              ><span
+                >Akun tambahan hanya berlaku di browser/origin ini. Kata sandi
+                demo disimpan lokal, jadi fitur ini bukan autentikasi aman untuk
+                produksi.</span
+              >
+            </p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div
+      class="modal-layer hidden"
+      id="edit-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-title"
+    >
+      <form class="edit-dialog" id="edit-form" novalidate>
+        <div class="dialog-heading">
+          <div>
+            <span class="overline">PERBARUI INFORMASI</span>
+            <h2 id="edit-title">Edit laporan</h2>
+          </div>
+          <button
+            class="icon-button"
+            id="close-edit"
+            type="button"
+            aria-label="Tutup editor"
+          >
+            ×
+          </button>
+        </div>
+        <input type="hidden" id="edit-id" />
+        <div class="photo-editor">
+          <div class="photo-preview" id="photo-preview">
+            <span>▧</span><small>Belum ada foto</small>
+          </div>
+          <div class="photo-controls">
+            <label
+              class="admin-button admin-button-quiet upload-button"
+              for="edit-photo"
+              >Pilih foto</label
+            ><input
+              class="sr-only"
+              id="edit-photo"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            /><button
+              class="text-danger hidden"
+              id="remove-photo"
+              type="button"
+            >
+              Hapus foto</button
+            ><small
+              >JPG, PNG, atau WebP. Maksimal 8 MB; foto akan diperkecil.</small
+            >
+          </div>
+        </div>
+        <div class="edit-fields">
+          <label
+            >Nama barang<input id="edit-name" maxlength="80" required
+          /></label>
+          <div class="edit-row">
+            <label
+              >Kategori<select id="edit-category" required>
+                <option>Elektronik</option>
+                <option>Dokumen</option>
+                <option>Tas</option>
+                <option>Kunci</option>
+                <option>Aksesori</option>
+                <option>Pakaian</option>
+                <option>Lainnya</option>
+              </select></label
+            ><label
+              >Status<select id="edit-status" required>
+                <option>Hilang</option>
+                <option>Ditemukan</option>
+              </select></label
+            >
+          </div>
+          <div class="edit-row">
+            <label
+              >Lokasi<input
+                id="edit-location"
+                maxlength="120"
+                required /></label
+            ><label
+              >Tanggal kejadian<input id="edit-date" type="date" required
+            /></label>
+          </div>
+          <label
+            >Deskripsi<textarea
+              id="edit-description"
+              rows="3"
+              maxlength="600"
+              required
+            ></textarea>
+          </label>
+          <label
+            >Kontak pelapor<input id="edit-contact" maxlength="100" required
+          /></label>
+        </div>
+        <p class="edit-error" id="edit-error" role="alert"></p>
+        <div class="dialog-actions">
+          <button
+            class="admin-button admin-button-quiet"
+            id="cancel-edit"
+            type="button"
+          >
+            Batal</button
+          ><button class="admin-button admin-button-primary" type="submit">
+            Simpan perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="toast-message hidden" id="admin-toast" role="status"></div>
+    <section class="print-area" id="print-area" aria-hidden="true"></section>
+  </body>
+</html>

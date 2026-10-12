@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Lost & Found Campus membantu mahasiswa menemukan kembali barang yang hilang di lingkungan kampus."
+    />
+    <title>Lost & Found Campus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container" aria-label="Navigasi utama">
+        <a
+          class="brand"
+          href="#beranda"
+          aria-label="Lost and Found Campus beranda"
+        >
+          <span class="brand-mark">LF</span>
+          <span
+            >lost<span class="brand-amp">&</span>found<span
+              class="brand-campus"
+            >
+              campus</span
+            ></span
+          >
+        </a>
+        <button
+          class="menu-toggle"
+          id="menu-toggle"
+          aria-label="Buka menu navigasi"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a class="nav-link active" href="#beranda">Beranda</a>
+          <a class="nav-link" href="#laporan">Laporan</a>
+          <a class="nav-link" href="#tentang">Tentang Kami</a>
+          <a class="button button-small" href="#lapor">+ Lapor Barang</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero section" id="beranda">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow"
+              ><span class="eyebrow-dot"></span> Ruang aman untuk barang yang
+              tertinggal</span
+            >
+            <h1>
+              Hilang atau<br />menemukan sesuatu?<br /><span
+                >Kita bantu cari.</span
+              >
+            </h1>
+            <p class="hero-description">
+              Temukan kembali barangmu atau bantu teman kampus menemukan barang
+              miliknya. Satu laporan kecil bisa sangat berarti.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="#lapor"
+                >Buat Laporan <span aria-hidden="true">↗</span></a
+              >
+              <a class="text-link" href="#laporan"
+                >Jelajahi laporan <span aria-hidden="true">→</span></a
+              >
+            </div>
+            <div class="hero-note">
+              <span class="note-icon">✳</span
+              ><span>Komunitas kampus yang saling peduli.</span>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Ilustrasi pencarian barang">
+            <div class="visual-orbit orbit-one"></div>
+            <div class="visual-orbit orbit-two"></div>
+            <div class="visual-card card-back">
+              <span class="mini-icon">⌕</span><span>Barang ditemukan</span
+              ><b>Semoga pemiliknya segera ketemu!</b>
+            </div>
+            <div class="illustration-circle">
+              <div class="magnifier">
+                <div class="magnifier-glass">
+                  <span class="sparkle">✦</span><span class="tiny-star">✧</span>
+                  <div class="search-line"></div>
+                </div>
+                <div class="magnifier-handle"></div>
+              </div>
+              <div class="floating-tag tag-lost">
+                <span class="tag-dot lost-dot"></span> Barang hilang
+              </div>
+              <div class="floating-tag tag-found">
+                <span class="tag-dot found-dot"></span> Barang ditemukan
+              </div>
+            </div>
+            <div class="visual-caption">
+              <span class="caption-star">✦</span
+              ><span>Small things matter.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-section">
+        <div class="container stats-grid">
+          <div class="stat-intro">
+            <span class="eyebrow">Ringkasan laporan</span>
+            <h2>Setiap barang<br />punya cerita.</h2>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon stat-icon-purple">⌕</span
+            ><span class="stat-label">Total laporan</span
+            ><strong id="stat-total">0</strong
+            ><span class="stat-foot">Semua laporan masuk</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon stat-icon-red">!</span
+            ><span class="stat-label">Barang hilang</span
+            ><strong id="stat-lost">0</strong
+            ><span class="stat-foot">Menunggu ditemukan</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon stat-icon-green">✓</span
+            ><span class="stat-label">Barang ditemukan</span
+            ><strong id="stat-found">0</strong
+            ><span class="stat-foot">Siap kembali ke pemilik</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reports-section" id="laporan">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">Papan informasi</span>
+              <h2>Laporan <span>terbaru.</span></h2>
+              <p>
+                Jelajahi laporan barang hilang dan ditemukan di lingkungan
+                kampus.
+              </p>
+            </div>
+            <a class="button button-outline" href="#lapor">+ Tambah laporan</a>
+          </div>
+          <div class="filter-panel">
+            <label class="search-box"
+              ><span aria-hidden="true">⌕</span
+              ><input
+                type="search"
+                id="search-input"
+                placeholder="Cari nama barang..."
+                aria-label="Cari nama barang"
+            /></label>
+            <label class="filter-select"
+              ><span class="sr-only">Filter kategori</span
+              ><select id="category-filter">
+                <option value="Semua">Semua kategori</option>
+                <option>Elektronik</option>
+                <option>Dokumen</option>
+                <option>Tas</option>
+                <option>Kunci</option>
+                <option>Aksesori</option>
+                <option>Pakaian</option>
+                <option>Lainnya</option>
+              </select></label
+            >
+            <label class="filter-select"
+              ><span class="sr-only">Filter status</span
+              ><select id="status-filter">
+                <option value="Semua">Semua status</option>
+                <option value="Hilang">Hilang</option>
+                <option value="Ditemukan">Ditemukan</option>
+              </select></label
+            >
+            <button class="button button-reset" id="reset-filter" type="button">
+              Reset
+            </button>
+          </div>
+          <div class="results-line">
+            <span id="result-count">Memuat laporan...</span
+            ><span class="live-indicator"
+              ><span></span
+              ><span id="storage-status">Menghubungkan server...</span></span
+            >
+          </div>
+          <div class="report-grid" id="report-grid" aria-live="polite"></div>
+          <div class="empty-state hidden" id="empty-state">
+            <div class="empty-illustration">⌕</div>
+            <h3>Tidak ada laporan yang sesuai</h3>
+            <p>Coba kata kunci atau filter lain, ya.</p>
+            <button
+              class="button button-outline"
+              id="empty-reset"
+              type="button"
+            >
+              Tampilkan semua laporan
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section section" id="lapor">
+        <div class="container form-layout">
+          <div class="form-aside">
+            <span class="eyebrow">Ayo saling membantu</span>
+            <h2>Barang kecil,<br /><span>arti besar.</span></h2>
+            <p>
+              Isi informasi yang jelas supaya pemilik atau orang yang menemukan
+              barang bisa saling terhubung.
+            </p>
+            <div class="aside-tip">
+              <span class="tip-icon">✦</span>
+              <div>
+                <strong>Tips laporan</strong>
+                <p>
+                  Tambahkan lokasi dan deskripsi yang spesifik. Jangan tulis
+                  kata sandi atau informasi rahasia.
+                </p>
+              </div>
+            </div>
+            <div class="form-steps">
+              <div>
+                <span>01</span>
+                <p>Isi detail barang</p>
+              </div>
+              <div>
+                <span>02</span>
+                <p>Periksa informasi</p>
+              </div>
+              <div>
+                <span>03</span>
+                <p>Kirim laporan</p>
+              </div>
+            </div>
+          </div>
+          <form class="report-form" id="report-form" novalidate>
+            <div class="form-heading">
+              <div>
+                <span class="eyebrow">Formulir laporan</span>
+                <h3>Lapor barang</h3>
+              </div>
+              <span class="required-note">* Wajib diisi</span>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="item-name">Nama barang <span>*</span></label
+                ><input
+                  id="item-name"
+                  name="name"
+                  type="text"
+                  placeholder="Contoh: Dompet warna cokelat"
+                  required
+                  minlength="3"
+                  maxlength="80"
+                /><small class="error-message" id="name-error"></small>
+              </div>
+              <div class="field">
+                <label for="item-category">Kategori <span>*</span></label
+                ><select id="item-category" name="category" required>
+                  <option value="">Pilih kategori</option>
+                  <option>Elektronik</option>
+                  <option>Dokumen</option>
+                  <option>Tas</option>
+                  <option>Kunci</option>
+                  <option>Aksesori</option>
+                  <option>Pakaian</option>
+                  <option>Lainnya</option></select
+                ><small class="error-message" id="category-error"></small>
+              </div>
+            </div>
+            <fieldset class="field status-field">
+              <legend>Status laporan <span>*</span></legend>
+              <div class="status-options">
+                <label class="status-option"
+                  ><input
+                    type="radio"
+                    name="status"
+                    value="Hilang"
+                    checked
+                  /><span class="status-choice lost-choice"
+                    ><b>!</b
+                    ><span
+                      ><strong>Barang hilang</strong
+                      ><small>Sedang mencari barang</small></span
+                    ></span
+                  ></label
+                ><label class="status-option"
+                  ><input type="radio" name="status" value="Ditemukan" /><span
+                    class="status-choice found-choice"
+                    ><b>✓</b
+                    ><span
+                      ><strong>Barang ditemukan</strong
+                      ><small>Menemukan barang orang lain</small></span
+                    ></span
+                  ></label
+                >
+              </div>
+              <small class="error-message" id="status-error"></small>
+            </fieldset>
+            <div class="form-row">
+              <div class="field">
+                <label for="item-location">Lokasi <span>*</span></label
+                ><input
+                  id="item-location"
+                  name="location"
+                  type="text"
+                  placeholder="Contoh: Perpustakaan lantai 2"
+                  required
+                  maxlength="120"
+                /><small class="error-message" id="location-error"></small>
+              </div>
+              <div class="field">
+                <label for="item-date">Tanggal kejadian <span>*</span></label
+                ><input id="item-date" name="date" type="date" required /><small
+                  class="error-message"
+                  id="date-error"
+                ></small>
+              </div>
+            </div>
+            <div class="field">
+              <label for="item-description"
+                >Deskripsi barang <span>*</span></label
+              ><textarea
+                id="item-description"
+                name="description"
+                rows="4"
+                placeholder="Jelaskan warna, ciri khusus, atau detail lain..."
+                required
+                maxlength="600"
+              ></textarea
+              ><small class="field-hint"
+                >Jangan cantumkan informasi pribadi yang sensitif.</small
+              ><small class="error-message" id="description-error"></small>
+            </div>
+            <div class="field">
+              <label for="item-contact"
+                >Kontak yang bisa dihubungi <span>*</span></label
+              ><input
+                id="item-contact"
+                name="contact"
+                type="text"
+                placeholder="Nomor HP atau email"
+                required
+                maxlength="100"
+              /><small class="field-hint"
+                >Kontak ini akan terlihat oleh pengunjung website.</small
+              ><small class="error-message" id="contact-error"></small>
+            </div>
+            <div class="field public-photo-field">
+              <label for="item-photo"
+                >Foto barang
+                <span class="optional-marker">Opsional</span></label
+              >
+              <input
+                id="item-photo"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                aria-describedby="item-photo-hint item-photo-error"
+              />
+              <small class="field-hint" id="item-photo-hint">
+                Tambahkan foto yang membantu mengenali barang. JPG, PNG, atau
+                WebP; maksimal 8 MB.
+              </small>
+              <div class="public-photo-preview hidden" id="item-photo-preview">
+                <img
+                  id="item-photo-preview-image"
+                  alt="Pratinjau foto barang"
+                />
+                <button
+                  class="photo-remove-button"
+                  id="remove-item-photo"
+                  type="button"
+                >
+                  Hapus foto
+                </button>
+              </div>
+              <small
+                class="error-message"
+                id="item-photo-error"
+                role="alert"
+              ></small>
+            </div>
+            <button class="button submit-button" type="submit">
+              Kirim laporan <span aria-hidden="true">↗</span>
+            </button>
+            <p class="privacy-note">
+              Dengan mengirim laporan, kamu setuju membagikan informasi kontak
+              tersebut kepada pengunjung website.
+            </p>
+            <div
+              class="form-feedback hidden"
+              id="form-feedback"
+              role="status"
+            ></div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section about-section" id="tentang">
+        <div class="container">
+          <div class="about-header">
+            <span class="eyebrow">Tentang Lost & Found Campus</span>
+            <h2>Biar barang kembali,<br /><span>nggak perlu ribet.</span></h2>
+            <p>
+              Website sederhana untuk membantu civitas kampus berbagi informasi
+              barang hilang dan ditemukan.
+            </p>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card">
+              <span class="step-number">01</span>
+              <div class="step-symbol">⌕</div>
+              <h3>Cari laporan</h3>
+              <p>
+                Gunakan pencarian dan filter untuk menemukan laporan yang
+                relevan.
+              </p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">02</span>
+              <div class="step-symbol">＋</div>
+              <h3>Buat laporan</h3>
+              <p>
+                Isi nama, kategori, lokasi, tanggal, deskripsi, dan kontak yang
+                dapat dihubungi.
+              </p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">03</span>
+              <div class="step-symbol">♡</div>
+              <h3>Hubungi pelapor</h3>
+              <p>
+                Buka detail laporan dan hubungi kontak yang tersedia untuk
+                koordinasi.
+              </p>
+            </article>
+          </div>
+          <div class="disclaimer">
+            <span>ⓘ</span>
+            <p>
+              <strong>Catatan:</strong> Laporan disimpan pada server proyek dan
+              dapat dibuka dari halaman publik maupun dashboard. Foto disimpan
+              di folder sesuai status barang.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <a class="brand footer-brand" href="#beranda"
+          ><span class="brand-mark">LF</span
+          ><span
+            >lost<span class="brand-amp">&</span>found<span
+              class="brand-campus"
+            >
+              campus</span
+            ></span
+          ></a
+        >
+        <p>Small things matter. Let’s help each other. ♡</p>
+        <span>© <span id="current-year"></span> Lost & Found Campus</span>
+      </div>
+    </footer>
+
+    <div
+      class="modal-backdrop hidden"
+      id="detail-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div class="modal-card">
+        <button class="modal-close" id="modal-close" aria-label="Tutup detail">
+          ×
+        </button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+    <div class="toast hidden" id="toast" role="status"></div>
+  </body>
+</html>
